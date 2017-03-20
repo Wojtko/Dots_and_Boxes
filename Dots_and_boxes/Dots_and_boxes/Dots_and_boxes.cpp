@@ -19,6 +19,15 @@ int main()
 		cin >> x;
 		cout << "Podaj y: ";
 		cin >> y;
+		if (x < 0 || x > 3 || y < 0 || y > 3)
+		{
+			printf("Incorrect input!\n");
+			cout << "Podaj x: ";
+			cin >> x;
+			cout << "Podaj y: ";
+			cin >> y;
+		}
+
 		gra.wykonajRuch(x - 1, y - 1);
 	}
 

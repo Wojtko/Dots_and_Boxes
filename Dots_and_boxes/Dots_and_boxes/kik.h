@@ -17,6 +17,8 @@ struct Kartka
 	Gracz pobierzRuch();
 	void wykonajRuch(int x, int y);
 	void wypiszPlansze();
+	void czyWygral(char znak, Gracz gracz);
+	void wypiszEndboard();
 };
 
 void Kartka::incjalizacja()
@@ -27,11 +29,11 @@ void Kartka::incjalizacja()
 		plansza[i].resize(WIDTH);
 	}
 
-	for (int i = 0; i < HEIGTH; i++)
+	for (int y = 0; y < HEIGTH; y++)
 	{
-		for (int j = 0; j < WIDTH; j++)
+		for (int x = 0; x < WIDTH; x++)
 		{
-			plansza[i][j] = ' ';
+			plansza[y][x] = ' ';
 		}
 	}
 }
@@ -46,16 +48,23 @@ void Kartka::wykonajRuch(int x, int y)
 {
 	Gracz grajacy = czyj_ruch;
 
-	if (grajacy == GRACZ_1)
+	if (plansza[y][x] == ' ')
 	{
-		plansza[y][x] = 'X';
-		czyj_ruch = GRACZ_2;
+		if (grajacy == GRACZ_1)
+		{
+			plansza[y][x] = 'X';
+			czyj_ruch = GRACZ_2;
+		}
+		else
+		{
+			plansza[y][x] = 'O';
+			czyj_ruch = GRACZ_1;
+		}
 	}
-	else
-	{
-		plansza[y][x] = 'O';
-		czyj_ruch = GRACZ_1;
-	}
+	char temp = plansza[y][x];
+
+	czyWygral(temp, grajacy);
+
 	system("cls");
 }
 
@@ -71,4 +80,23 @@ void Kartka::wypiszPlansze()
 		}
 		printf("\n-----------------\n");
 	}
+}
+
+void Kartka::czyWygral(char znak, Gracz gracz)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (znak == plansza[0][i] && znak == plansza[1][i] && znak == plansza[2][i]) wypiszEndboard();
+		else if (znak == plansza[i][0] && znak == plansza[i][1] && znak == plansza[i][2]) wypiszEndboard();
+	}
+	if (znak == plansza[0][0] && znak == plansza[1][1] && znak == plansza[2][2]) wypiszEndboard();
+	else if (znak == plansza[2][0] && znak == plansza[1][1] && znak == plansza[0][2]) wypiszEndboard();
+}
+
+void Kartka::wypiszEndboard()
+{
+	system("cls");
+	wypiszPlansze();
+	printf("\nWygrales!");
+	system("pause");
 }
